@@ -1,0 +1,15 @@
+# Release/build artifacts.
+*.zip
+releases/
+.build/
+
+# OS/editor files.
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Dependency/build folders, if ever added.
+node_modules/
+vendor/
+*.map
