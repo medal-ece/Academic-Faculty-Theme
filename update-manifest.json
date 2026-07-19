@@ -1,7 +1,7 @@
 {
-  "version": "1.4.1",
-  "download_url": "https://github.com/medal-ece/Academic-Faculty-Theme/releases/download/v1.4.1/faculty-theme.zip",
-  "details_url": "https://github.com/medal-ece/Academic-Faculty-Theme/releases/tag/v1.4.1",
+  "version": "1.4.2",
+  "download_url": "https://github.com/medal-ece/Academic-Faculty-Theme/releases/download/v1.4.2/faculty-theme.zip",
+  "details_url": "https://github.com/medal-ece/Academic-Faculty-Theme/releases/tag/v1.4.2",
   "requires": "6.0",
   "requires_php": "7.4"
 }

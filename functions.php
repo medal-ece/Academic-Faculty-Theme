@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) {
 }
 
 if (!defined('FACULTY_THEME_VERSION')) {
-    define('FACULTY_THEME_VERSION', '1.4.1');
+    define('FACULTY_THEME_VERSION', '1.4.2');
 }
 
 function faculty_theme_setup() {
@@ -39,7 +39,7 @@ function faculty_theme_hide_courses_menu_item($items, $args) {
             return false;
         }
 
-        return !preg_match('#/courses/?($|[?#])#i', $url);
+        return !preg_match('~/courses/?($|[?#])~i', $url);
     }));
 }
 add_filter('wp_nav_menu_objects', 'faculty_theme_hide_courses_menu_item', 10, 2);
