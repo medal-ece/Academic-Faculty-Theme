@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) {
 }
 
 if (!defined('FACULTY_THEME_VERSION')) {
-    define('FACULTY_THEME_VERSION', '1.4.2');
+    define('FACULTY_THEME_VERSION', '1.4.3');
 }
 
 function faculty_theme_setup() {
@@ -184,6 +184,7 @@ function faculty_theme_default_options() {
         'intro_image'      => '',
         'show_slideshow'   => '0',
         'slide_font'       => 'default',
+        'slide_title_size' => '4.2rem',
         'slide_default_duration' => 7000,
         'show_gadgets'      => '0',
         'show_news'        => '1',
@@ -368,6 +369,7 @@ function faculty_theme_sanitize_options($input) {
     $output['show_slideshow'] = !empty($input['show_slideshow']) ? '1' : '0';
     $allowed_fonts = array('default', 'classic', 'serif', 'condensed', 'mono');
     $output['slide_font'] = isset($input['slide_font']) && in_array($input['slide_font'], $allowed_fonts, true) ? $input['slide_font'] : $defaults['slide_font'];
+    $output['slide_title_size'] = faculty_theme_sanitize_css_size(isset($input['slide_title_size']) ? $input['slide_title_size'] : '', $defaults['slide_title_size']);
     $output['slide_default_duration'] = isset($input['slide_default_duration']) ? min(30000, max(2000, absint($input['slide_default_duration']))) : $defaults['slide_default_duration'];
     $output['show_gadgets'] = !empty($input['show_gadgets']) ? '1' : '0';
     $output['show_news'] = !empty($input['show_news']) ? '1' : '0';
@@ -1028,6 +1030,7 @@ function faculty_theme_render_settings_page() {
                 <h2><?php esc_html_e('Slider Settings', 'faculty-theme'); ?></h2>
                 <table class="form-table" role="presentation">
                     <tr><th scope="row"><label for="faculty-slide-font"><?php esc_html_e('Slide typography', 'faculty-theme'); ?></label></th><td><select id="faculty-slide-font" name="faculty_theme_options[slide_font]"><?php foreach ($slide_fonts as $font_key => $font_label) : ?><option value="<?php echo esc_attr($font_key); ?>" <?php selected($options['slide_font'], $font_key); ?>><?php echo esc_html($font_label); ?></option><?php endforeach; ?></select></td></tr>
+                    <tr><th scope="row"><label for="faculty-slide-title-size"><?php esc_html_e('Default slide title size', 'faculty-theme'); ?></label></th><td><input id="faculty-slide-title-size" class="small-text" name="faculty_theme_options[slide_title_size]" value="<?php echo esc_attr($options['slide_title_size']); ?>"> <span class="description"><?php esc_html_e('Use a CSS size such as 3rem, 56px, or 4vw. Individual slides can override this below.', 'faculty-theme'); ?></span></td></tr>
                     <tr><th scope="row"><label for="faculty-slide-default-duration"><?php esc_html_e('Default slide timing', 'faculty-theme'); ?></label></th><td><input id="faculty-slide-default-duration" type="number" min="2000" max="30000" step="500" name="faculty_theme_options[slide_default_duration]" value="<?php echo esc_attr($options['slide_default_duration']); ?>"> <span class="description"><?php esc_html_e('milliseconds; used when an individual slide timing is empty.', 'faculty-theme'); ?></span></td></tr>
                 </table>
                 <p class="faculty-settings-note"><?php esc_html_e('Add as many slides as you need. Empty slides are ignored when saved. Wide, consistently sized images around 1920 x 900 pixels work best.', 'faculty-theme'); ?></p>
@@ -1283,7 +1286,7 @@ function faculty_theme_render_slide_fields($index, $slide) {
         <p><label><?php esc_html_e('Summary', 'faculty-theme'); ?><br><textarea class="large-text" rows="2" name="<?php echo esc_attr($field_base); ?>[text]"><?php echo esc_textarea($slide['text']); ?></textarea></label></p>
         <p><label><?php esc_html_e('Button label', 'faculty-theme'); ?> <input name="<?php echo esc_attr($field_base); ?>[button_text]" value="<?php echo esc_attr($slide['button_text']); ?>"></label> <label><?php esc_html_e('Button URL', 'faculty-theme'); ?> <input class="regular-text" type="url" name="<?php echo esc_attr($field_base); ?>[button_url]" value="<?php echo esc_url($slide['button_url']); ?>"></label></p>
         <p>
-            <label><?php esc_html_e('Title size', 'faculty-theme'); ?> <input class="small-text" name="<?php echo esc_attr($field_base); ?>[title_size]" value="<?php echo esc_attr($slide['title_size']); ?>" placeholder="4rem"></label>
+            <label><?php esc_html_e('Title size override', 'faculty-theme'); ?> <input class="small-text" name="<?php echo esc_attr($field_base); ?>[title_size]" value="<?php echo esc_attr($slide['title_size']); ?>" placeholder="<?php esc_attr_e('Use default', 'faculty-theme'); ?>"></label>
             <label><?php esc_html_e('Timing', 'faculty-theme'); ?> <input type="number" min="2000" max="30000" step="500" name="<?php echo esc_attr($field_base); ?>[duration]" value="<?php echo esc_attr($slide['duration']); ?>"> <?php esc_html_e('ms', 'faculty-theme'); ?></label>
             <label><?php esc_html_e('Transition', 'faculty-theme'); ?> <select name="<?php echo esc_attr($field_base); ?>[transition]"><?php foreach ($transitions as $transition_key => $transition_label) : ?><option value="<?php echo esc_attr($transition_key); ?>" <?php selected($slide['transition'], $transition_key); ?>><?php echo esc_html($transition_label); ?></option><?php endforeach; ?></select></label>
             <label><?php esc_html_e('Image fit', 'faculty-theme'); ?> <select name="<?php echo esc_attr($field_base); ?>[image_fit]"><?php foreach ($image_fits as $fit_key => $fit_label) : ?><option value="<?php echo esc_attr($fit_key); ?>" <?php selected($slide['image_fit'], $fit_key); ?>><?php echo esc_html($fit_label); ?></option><?php endforeach; ?></select></label>

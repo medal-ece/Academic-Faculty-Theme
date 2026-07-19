@@ -58,7 +58,7 @@ if (!function_exists('faculty_theme_home_parallax_band')) {
 <?php if (!empty($parallax_bands[0])) : faculty_theme_home_parallax_band($parallax_bands[0], 0); endif; ?>
 
 <?php if ('1' === $options['show_slideshow'] && $slides) : ?>
-<section class="faculty-hero <?php echo esc_attr($slide_font_class); ?>" aria-roledescription="carousel" aria-label="<?php esc_attr_e('Featured content', 'faculty-theme'); ?>" data-slider data-transition="<?php echo esc_attr(!empty($slides[0]['transition']) ? $slides[0]['transition'] : 'fade'); ?>">
+<section class="faculty-hero <?php echo esc_attr($slide_font_class); ?>" style="--faculty-slide-title-size:<?php echo esc_attr(!empty($options['slide_title_size']) ? $options['slide_title_size'] : '4.2rem'); ?>;" aria-roledescription="carousel" aria-label="<?php esc_attr_e('Featured content', 'faculty-theme'); ?>" data-slider data-transition="<?php echo esc_attr(!empty($slides[0]['transition']) ? $slides[0]['transition'] : 'fade'); ?>">
     <div class="faculty-slides" aria-live="off">
         <?php foreach ($slides as $index => $slide) : ?>
             <article class="faculty-slide faculty-slide-fit-<?php echo esc_attr(!empty($slide['image_fit']) ? sanitize_html_class($slide['image_fit']) : 'contain'); ?><?php echo 0 === $index ? ' is-active' : ''; ?>" data-slide data-duration="<?php echo esc_attr(!empty($slide['duration']) ? absint($slide['duration']) : absint($options['slide_default_duration'])); ?>" data-transition="<?php echo esc_attr(!empty($slide['transition']) ? $slide['transition'] : 'fade'); ?>" aria-hidden="<?php echo 0 === $index ? 'false' : 'true'; ?>"<?php echo 0 === $index ? '' : ' hidden'; ?>>

@@ -3,7 +3,7 @@ Theme Name: Faculty Theme
 Theme URI: https://example.edu/
 Author: Academic Web Team
 Description: A lightweight, accessible academic theme designed for faculty and research group websites.
-Version: 1.4.2
+Version: 1.4.3
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
@@ -206,18 +206,18 @@ button, input[type="submit"] { padding: .65rem 1rem; border: 1px solid var(--fac
 .faculty-hero[data-transition="zoom"] .faculty-slide.is-active { transform: scale(1); }
 .faculty-slide::after { content: none; }
 .faculty-slide-shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0,0,0,.88) 0%, rgba(0,0,0,.58) 42%, rgba(0,0,0,.16) 100%); }
-.faculty-slide-content { position: relative; z-index: 3; width: min(calc(100% - 2rem), var(--faculty-width)); max-height: calc(100% - 7.5rem); margin-inline: auto; padding: clamp(1.5rem, 4vw, 2.5rem) 0 clamp(1.5rem, 4vw, 2.5rem) clamp(1.75rem, 4vw, 3rem); overflow: visible; }
+.faculty-slide-content { position: relative; z-index: 3; display: flex; width: min(calc(100% - 2rem), var(--faculty-width)); max-height: calc(100% - 8rem); flex-direction: column; align-items: flex-start; margin-inline: auto; padding: clamp(1.5rem, 4vw, 2.5rem) 0 clamp(1.5rem, 4vw, 2.5rem) clamp(1.75rem, 4vw, 3rem); overflow: hidden; }
 .faculty-slide-content::after { content: none; }
-.faculty-slide-content h2 { max-width: min(100%, 64rem); margin: 0; color: #fff; font-size: var(--faculty-slide-title-size, clamp(2.2rem, 6vw, 4.8rem)); font-weight: 850; letter-spacing: -.045em; line-height: 1.04; overflow-wrap: anywhere; text-wrap: balance; text-shadow: 0 2px 10px rgba(0,0,0,.25); }
+.faculty-slide-content h2 { position: relative; display: -webkit-box; max-width: min(100%, 64rem); max-height: calc(var(--faculty-slide-title-size, 4.2rem) * 3.4); margin: 0; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 3; color: #fff; font-size: var(--faculty-slide-title-size, clamp(2.2rem, 6vw, 4.2rem)); font-weight: 850; letter-spacing: -.045em; line-height: 1.08; overflow-wrap: anywhere; text-wrap: balance; text-shadow: 0 2px 10px rgba(0,0,0,.25); }
 .faculty-slide-content h2::after { display: block; width: 5rem; height: .34rem; margin-top: .9rem; background: var(--faculty-accent); content: ""; }
-.faculty-slide-content p { position: relative; display: -webkit-box; max-width: 44rem; max-height: 9.8rem; margin: 1rem 0 0; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 5; font-size: clamp(1rem, 1.7vw, 1.24rem); line-height: 1.58; }
+.faculty-slide-content p { position: relative; display: -webkit-box; max-width: 44rem; max-height: 7.7rem; margin: 1rem 0 0; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 4; font-size: clamp(1rem, 1.7vw, 1.24rem); line-height: 1.58; }
 .faculty-slide-content p::after { position: absolute; right: 0; bottom: 0; width: 35%; height: 1.65em; background: linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,.58) 72%); content: ""; pointer-events: none; }
 .faculty-slide-font-classic .faculty-slide-content { font-family: Arial, Helvetica, sans-serif; }
 .faculty-slide-font-serif .faculty-slide-content { font-family: Georgia, "Times New Roman", serif; }
 .faculty-slide-font-condensed .faculty-slide-content h2 { font-family: "Arial Narrow", "Roboto Condensed", Impact, sans-serif; letter-spacing: -.03em; text-transform: uppercase; }
 .faculty-slide-font-mono .faculty-slide-content h2 { font-family: "Courier New", Consolas, monospace; letter-spacing: -.02em; }
 .faculty-slide-font-mono .faculty-slide-content p { font-family: "Courier New", Consolas, monospace; }
-.faculty-button { position: relative; z-index: 1; display: inline-block; margin-top: 1.2rem; padding: .78rem 1.2rem; border-radius: var(--faculty-radius); color: #fff; background: var(--faculty-accent); font-weight: 750; text-decoration: none; }
+.faculty-button { position: relative; z-index: 1; display: inline-block; flex: 0 0 auto; margin-top: 1.2rem; padding: .78rem 1.2rem; border-radius: var(--faculty-radius); color: #fff; background: var(--faculty-accent); font-weight: 750; text-decoration: none; }
 .faculty-button:hover, .faculty-button:focus { color: #fff; background: var(--faculty-accent-dark); }
 .faculty-slider-controls { position: absolute; z-index: 3; right: 0; bottom: 1.25rem; left: 0; display: flex; justify-content: end; gap: .4rem; pointer-events: none; }
 .faculty-slider-controls button { min-width: 2.8rem; border-color: #fff; background: rgba(0,0,0,.72); pointer-events: auto; }
@@ -524,8 +524,8 @@ button, input[type="submit"] { padding: .65rem 1rem; border: 1px solid var(--fac
     .faculty-hero { height: 34rem; min-height: 34rem; }
     .faculty-slide { align-items: end; }
     .faculty-slide-content { max-height: calc(100% - 5.5rem); margin-bottom: 4rem; padding: 1.25rem 1rem 1.25rem 1.75rem; background: transparent; }
-    .faculty-slide-content h2 { font-size: var(--faculty-slide-title-size, clamp(1.9rem, 10vw, 3.35rem)); }
-    .faculty-slide-content p { -webkit-line-clamp: 4; max-height: 7rem; }
+    .faculty-slide-content h2 { max-height: calc(var(--faculty-slide-title-size, 3.1rem) * 3.35); font-size: var(--faculty-slide-title-size, clamp(1.9rem, 10vw, 3.1rem)); }
+    .faculty-slide-content p { -webkit-line-clamp: 3; max-height: 5.4rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
