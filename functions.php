@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) {
 }
 
 if (!defined('FACULTY_THEME_VERSION')) {
-    define('FACULTY_THEME_VERSION', '1.4.5');
+    define('FACULTY_THEME_VERSION', '1.4.6');
 }
 
 function faculty_theme_setup() {
@@ -267,12 +267,55 @@ function faculty_theme_normalize_media_url($url) {
         return '';
     }
 
+    if (ctype_digit($url)) {
+        $attachment_url = wp_get_attachment_image_url((int) $url, 'full');
+        if ($attachment_url) {
+            return $attachment_url;
+        }
+    }
+
+    if (filter_var($url, FILTER_VALIDATE_URL)) {
+        $attachment_id = attachment_url_to_postid($url);
+        if ($attachment_id) {
+            $attachment_url = wp_get_attachment_image_url($attachment_id, 'full');
+            if ($attachment_url) {
+                return $attachment_url;
+            }
+        }
+    }
+
     $uploads_marker = '/wp-content/uploads/';
     $marker_position = strpos($url, $uploads_marker);
 
     if ($marker_position !== false) {
         $relative_upload_path = substr($url, $marker_position + strlen('/wp-content/'));
         return content_url($relative_upload_path);
+    }
+
+    $path = filter_var($url, FILTER_VALIDATE_URL) ? (string) wp_parse_url($url, PHP_URL_PATH) : $url;
+    $basename = wp_basename($path);
+
+    if ($basename !== '') {
+        global $wpdb;
+        $name_without_extension = pathinfo($basename, PATHINFO_FILENAME);
+        $attachment_id = $wpdb->get_var($wpdb->prepare(
+            "SELECT pm.post_id FROM $wpdb->postmeta pm
+             INNER JOIN $wpdb->posts p ON p.ID = pm.post_id
+             WHERE pm.meta_key = '_wp_attached_file'
+             AND (pm.meta_value LIKE %s OR pm.meta_value LIKE %s)
+             AND p.post_type = 'attachment'
+             AND p.post_mime_type LIKE 'image/%%'
+             LIMIT 1",
+            '%' . $wpdb->esc_like($basename),
+            '%' . $wpdb->esc_like($name_without_extension) . '%'
+        ));
+
+        if ($attachment_id) {
+            $attachment_url = wp_get_attachment_image_url((int) $attachment_id, 'full');
+            if ($attachment_url) {
+                return $attachment_url;
+            }
+        }
     }
 
     return $url;
