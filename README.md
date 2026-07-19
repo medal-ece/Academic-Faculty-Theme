@@ -37,13 +37,19 @@ When working from the current XAMPP `wp-content` workspace, you can also run:
 
 The theme can be updated later through **Appearance > Themes > Add New > Upload Theme**. WordPress replaces the theme code while preserving pages, posts, menus, uploads, and Faculty Theme settings stored in the database.
 
-Optional automatic theme updates are supported if a release JSON endpoint is configured in `wp-config.php`:
+GitHub release-based theme updates are built in. By default, Faculty Theme checks:
 
-```php
-define('FACULTY_THEME_UPDATE_JSON', 'https://raw.githubusercontent.com/medal-ece/Academic-Faculty-Theme/main/update-manifest.json');
+```text
+https://raw.githubusercontent.com/medal-ece/Academic-Faculty-Theme/main/update-manifest.json
 ```
 
-The JSON should include at least:
+Advanced deployments may override that endpoint in `wp-config.php` if needed:
+
+```php
+define('FACULTY_THEME_UPDATE_JSON', 'https://example.edu/custom-theme-update-manifest.json');
+```
+
+The update manifest should include at least:
 
 ```json
 {
@@ -58,6 +64,18 @@ For source control, connect this directory to:
 ```text
 https://github.com/medal-ece/Academic-Faculty-Theme
 ```
+
+## Academic Faculty Toolkit template overrides
+
+Faculty Theme owns MEDAL-specific presentation for the Academic Faculty Toolkit public routes through template overrides in:
+
+```text
+academic-directory/
+```
+
+Those files mirror selected plugin templates such as the research-group directory, PI profile, student profile, PI card, and student card. If an override is missing, the plugin automatically falls back to its bundled default template.
+
+Keep data handling, private edit links, saves, uploads, and routes in the plugin. Keep visual changes to these public templates in this theme folder.
 
 ## 2. Create the required pages
 

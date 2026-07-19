@@ -10,7 +10,11 @@ if (!defined('ABSPATH')) {
 }
 
 if (!defined('FACULTY_THEME_VERSION')) {
-    define('FACULTY_THEME_VERSION', '1.4.6');
+    define('FACULTY_THEME_VERSION', '1.4.7');
+}
+
+if (!defined('FACULTY_THEME_DEFAULT_UPDATE_JSON')) {
+    define('FACULTY_THEME_DEFAULT_UPDATE_JSON', 'https://raw.githubusercontent.com/medal-ece/Academic-Faculty-Theme/main/update-manifest.json');
 }
 
 function faculty_theme_setup() {
@@ -53,17 +57,19 @@ function faculty_theme_assets() {
 add_action('wp_enqueue_scripts', 'faculty_theme_assets');
 
 function faculty_theme_get_update_info() {
-    if (!defined('FACULTY_THEME_UPDATE_JSON') || !FACULTY_THEME_UPDATE_JSON) {
+    $manifest_url = defined('FACULTY_THEME_UPDATE_JSON') && FACULTY_THEME_UPDATE_JSON ? FACULTY_THEME_UPDATE_JSON : FACULTY_THEME_DEFAULT_UPDATE_JSON;
+
+    if (!$manifest_url) {
         return false;
     }
 
-    $cache_key = 'faculty_theme_update_info';
+    $cache_key = 'faculty_theme_update_info_' . md5(FACULTY_THEME_VERSION . '|' . $manifest_url);
     $cached = get_site_transient($cache_key);
     if (is_array($cached)) {
         return $cached;
     }
 
-    $response = wp_remote_get(FACULTY_THEME_UPDATE_JSON, array(
+    $response = wp_remote_get($manifest_url, array(
         'timeout' => 5,
         'headers' => array('Accept' => 'application/json'),
     ));
