@@ -26,7 +26,7 @@ if (!function_exists('faculty_theme_home_parallax_band')) {
         }
         $label = !empty($band['label']) ? $band['label'] : sprintf(__('University image %d', 'faculty-theme'), $index + 1);
         ?>
-        <section class="home-photo-band" aria-label="<?php echo esc_attr($label); ?>" style="background-image:url('<?php echo esc_url($band['image']); ?>')">
+        <section class="home-photo-band" aria-label="<?php echo esc_attr($label); ?>" style="background-image:url('<?php echo esc_url(faculty_theme_normalize_media_url($band['image'])); ?>')">
             <span class="screen-reader-text"><?php echo esc_html($label); ?></span>
         </section>
         <?php
@@ -46,7 +46,7 @@ if (!function_exists('faculty_theme_home_parallax_band')) {
         </div>
         <div class="medal-intro-visual" aria-hidden="<?php echo $options['intro_image'] ? 'false' : 'true'; ?>">
             <?php if ($options['intro_image']) : ?>
-                <img src="<?php echo esc_url($options['intro_image']); ?>" alt="<?php echo esc_attr($options['intro_title'] ? $options['intro_title'] : get_bloginfo('name')); ?>">
+                <img src="<?php echo esc_url(faculty_theme_normalize_media_url($options['intro_image'])); ?>" alt="<?php echo esc_attr($options['intro_title'] ? $options['intro_title'] : get_bloginfo('name')); ?>">
             <?php else : ?>
                 <div class="medal-monogram">MEDAL</div>
             <?php endif; ?>
@@ -62,9 +62,9 @@ if (!function_exists('faculty_theme_home_parallax_band')) {
     <div class="faculty-slides" aria-live="off">
         <?php foreach ($slides as $index => $slide) : ?>
             <article class="faculty-slide faculty-slide-fit-<?php echo esc_attr(!empty($slide['image_fit']) ? sanitize_html_class($slide['image_fit']) : 'contain'); ?><?php echo 0 === $index ? ' is-active' : ''; ?>" data-slide data-duration="<?php echo esc_attr(!empty($slide['duration']) ? absint($slide['duration']) : absint($options['slide_default_duration'])); ?>" data-transition="<?php echo esc_attr(!empty($slide['transition']) ? $slide['transition'] : 'fade'); ?>" aria-hidden="<?php echo 0 === $index ? 'false' : 'true'; ?>"<?php echo 0 === $index ? '' : ' hidden'; ?>>
-                <?php if ($slide['image']) : ?><img class="faculty-slide-image" src="<?php echo esc_url($slide['image']); ?>" alt="<?php echo esc_attr(!empty($slide['title']) ? $slide['title'] : get_bloginfo('name')); ?>" loading="<?php echo 0 === $index ? 'eager' : 'lazy'; ?>"><?php endif; ?>
+                <?php if ($slide['image']) : ?><img class="faculty-slide-image" src="<?php echo esc_url(faculty_theme_normalize_media_url($slide['image'])); ?>" alt="<?php echo esc_attr(!empty($slide['title']) ? $slide['title'] : get_bloginfo('name')); ?>" loading="<?php echo 0 === $index ? 'eager' : 'lazy'; ?>"><?php endif; ?>
                 <div class="faculty-slide-shade"></div>
-                <div class="container faculty-slide-content">
+                <div class="container faculty-slide-content"<?php echo !empty($slide['title_size']) ? ' style="--faculty-slide-title-size:' . esc_attr($slide['title_size']) . ';"' : ''; ?>>
                     <?php if ($slide['title']) : ?><h2><?php echo esc_html($slide['title']); ?></h2><?php endif; ?>
                     <?php if ($slide['text']) : ?><p><?php echo esc_html($slide['text']); ?></p><?php endif; ?>
                     <?php if ($slide['button_text'] && $slide['button_url']) : ?><a class="faculty-button" href="<?php echo esc_url($slide['button_url']); ?>"><?php echo esc_html($slide['button_text']); ?></a><?php endif; ?>
@@ -119,7 +119,7 @@ if (!function_exists('faculty_theme_home_parallax_band')) {
             <?php foreach ($logo_items as $logo) : ?>
                 <li>
                     <?php if (!empty($logo['url'])) : ?><a href="<?php echo esc_url($logo['url']); ?>"><?php endif; ?>
-                    <img src="<?php echo esc_url($logo['image']); ?>" alt="<?php echo esc_attr($logo['name']); ?>">
+                    <img src="<?php echo esc_url(faculty_theme_normalize_media_url($logo['image'])); ?>" alt="<?php echo esc_attr($logo['name']); ?>" loading="lazy" decoding="async">
                     <?php if (!empty($logo['url'])) : ?></a><?php endif; ?>
                 </li>
             <?php endforeach; ?>

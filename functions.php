@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) {
 }
 
 if (!defined('FACULTY_THEME_VERSION')) {
-    define('FACULTY_THEME_VERSION', '1.4.0');
+    define('FACULTY_THEME_VERSION', '1.4.1');
 }
 
 function faculty_theme_setup() {
@@ -29,6 +29,20 @@ function faculty_theme_setup() {
     ));
 }
 add_action('after_setup_theme', 'faculty_theme_setup');
+
+function faculty_theme_hide_courses_menu_item($items, $args) {
+    return array_values(array_filter((array) $items, function ($item) {
+        $title = isset($item->title) ? trim(wp_strip_all_tags($item->title)) : '';
+        $url = isset($item->url) ? trim((string) $item->url) : '';
+
+        if (strcasecmp($title, 'Courses') === 0) {
+            return false;
+        }
+
+        return !preg_match('#/courses/?($|[?#])#i', $url);
+    }));
+}
+add_filter('wp_nav_menu_objects', 'faculty_theme_hide_courses_menu_item', 10, 2);
 
 function faculty_theme_assets() {
     $version = FACULTY_THEME_VERSION;
@@ -218,6 +232,24 @@ function faculty_theme_color_fields() {
     );
 }
 
+function faculty_theme_sanitize_css_size($value, $default = '') {
+    $value = trim(sanitize_text_field((string) $value));
+
+    if ($value === '') {
+        return $default;
+    }
+
+    if (preg_match('/^\d+(\.\d+)?$/', $value)) {
+        $value .= 'rem';
+    }
+
+    if (!preg_match('/^\d+(\.\d+)?(px|rem|em|vw|vh|%)$/', $value)) {
+        return $default;
+    }
+
+    return $value;
+}
+
 function faculty_theme_get_options() {
     return wp_parse_args((array) get_option('faculty_theme_options', array()), faculty_theme_default_options());
 }
@@ -227,8 +259,26 @@ function faculty_theme_get_option($key, $default = '') {
     return isset($options[$key]) ? $options[$key] : $default;
 }
 
+function faculty_theme_normalize_media_url($url) {
+    $url = trim((string) $url);
+
+    if ($url === '') {
+        return '';
+    }
+
+    $uploads_marker = '/wp-content/uploads/';
+    $marker_position = strpos($url, $uploads_marker);
+
+    if ($marker_position !== false) {
+        $relative_upload_path = substr($url, $marker_position + strlen('/wp-content/'));
+        return content_url($relative_upload_path);
+    }
+
+    return $url;
+}
+
 function faculty_theme_get_gallery_image_data($image_url, $fallback_alt = '') {
-    $image_url = esc_url_raw($image_url);
+    $image_url = esc_url_raw(faculty_theme_normalize_media_url($image_url));
     $data = array(
         'full'    => $image_url,
         'preview' => $image_url,
@@ -304,12 +354,7 @@ function faculty_theme_sanitize_options($input) {
         $output[$color_key] = $output[$color_key] ? $output[$color_key] : $fallback;
     }
     $output['page_hero_image'] = esc_url_raw(isset($input['page_hero_image']) ? $input['page_hero_image'] : '');
-    $hero_title_size = sanitize_text_field(isset($input['page_hero_title_size']) ? $input['page_hero_title_size'] : $defaults['page_hero_title_size']);
-    $hero_title_size = trim($hero_title_size);
-    if ($hero_title_size !== '' && preg_match('/^\d+(\.\d+)?$/', $hero_title_size)) {
-        $hero_title_size .= 'rem';
-    }
-    $output['page_hero_title_size'] = $hero_title_size !== '' ? $hero_title_size : $defaults['page_hero_title_size'];
+    $output['page_hero_title_size'] = faculty_theme_sanitize_css_size(isset($input['page_hero_title_size']) ? $input['page_hero_title_size'] : '', $defaults['page_hero_title_size']);
     $output['footer_lab_info'] = wp_kses_post(isset($input['footer_lab_info']) ? $input['footer_lab_info'] : '');
     $output['footer_text'] = wp_kses_post(isset($input['footer_text']) ? $input['footer_text'] : '');
     $output['show_intro'] = !empty($input['show_intro']) ? '1' : '0';
@@ -343,6 +388,7 @@ function faculty_theme_sanitize_options($input) {
                 'duration'    => isset($slide['duration']) ? min(30000, max(2000, absint($slide['duration']))) : $output['slide_default_duration'],
                 'transition'  => isset($slide['transition']) && in_array($slide['transition'], array('fade', 'slide', 'zoom'), true) ? $slide['transition'] : 'fade',
                 'image_fit'   => isset($slide['image_fit']) && in_array($slide['image_fit'], array('contain', 'cover', 'stretch'), true) ? $slide['image_fit'] : 'contain',
+                'title_size'  => faculty_theme_sanitize_css_size(isset($slide['title_size']) ? $slide['title_size'] : ''),
             );
             if ($clean['image'] || $clean['title'] || $clean['text']) {
                 $output['slides'][] = $clean;
@@ -597,13 +643,13 @@ function faculty_theme_get_page_hero_image() {
     $options = faculty_theme_get_options();
 
     if (!empty($options['page_hero_image'])) {
-        return $options['page_hero_image'];
+        return faculty_theme_normalize_media_url($options['page_hero_image']);
     }
 
     if (!empty($options['parallax_bands']) && is_array($options['parallax_bands'])) {
         foreach ($options['parallax_bands'] as $band) {
             if (!empty($band['image'])) {
-                return $band['image'];
+                return faculty_theme_normalize_media_url($band['image']);
             }
         }
     }
@@ -611,18 +657,18 @@ function faculty_theme_get_page_hero_image() {
     if (!empty($options['slides']) && is_array($options['slides'])) {
         foreach ($options['slides'] as $slide) {
             if (!empty($slide['image'])) {
-                return $slide['image'];
+                return faculty_theme_normalize_media_url($slide['image']);
             }
         }
     }
 
     if (!empty($options['intro_image'])) {
-        return $options['intro_image'];
+        return faculty_theme_normalize_media_url($options['intro_image']);
     }
 
     $legacy_profile_settings = get_option('academic_directory_profile_page_settings', array());
     if (is_array($legacy_profile_settings) && !empty($legacy_profile_settings['hero_image'])) {
-        return $legacy_profile_settings['hero_image'];
+        return faculty_theme_normalize_media_url($legacy_profile_settings['hero_image']);
     }
 
     return '';
@@ -770,7 +816,6 @@ function faculty_theme_render_setup_guide_page() {
                     <li><?php esc_html_e('Create Home with the default template.', 'faculty-theme'); ?></li>
                     <li><?php esc_html_e('Create NEWS with the default template.', 'faculty-theme'); ?></li>
                     <li><?php esc_html_e('Create Research and select the Faculty Research template.', 'faculty-theme'); ?></li>
-                    <li><?php esc_html_e('Create Courses with the default template.', 'faculty-theme'); ?></li>
                     <li><?php esc_html_e('Create Gallery and select the Faculty Gallery template.', 'faculty-theme'); ?></li>
                     <li><?php esc_html_e('Create Contact and select the Faculty Contact template.', 'faculty-theme'); ?></li>
                 </ol>
@@ -796,7 +841,6 @@ function faculty_theme_render_setup_guide_page() {
                     <li><?php esc_html_e('NEWS', 'faculty-theme'); ?></li>
                     <li><?php esc_html_e('Research', 'faculty-theme'); ?></li>
                     <li><?php esc_html_e('Research Group as a custom link to /research-group/', 'faculty-theme'); ?></li>
-                    <li><?php esc_html_e('Courses', 'faculty-theme'); ?></li>
                     <li><?php esc_html_e('Gallery', 'faculty-theme'); ?></li>
                     <li><?php esc_html_e('Contact', 'faculty-theme'); ?></li>
                 </ul>
@@ -823,7 +867,6 @@ function faculty_theme_render_setup_guide_page() {
                     <li><span class="faculty-theme-help-code">/research/</span></li>
                     <li><span class="faculty-theme-help-code">/research-group/</span></li>
                     <li><span class="faculty-theme-help-code">/research-group/PI/</span></li>
-                    <li><span class="faculty-theme-help-code">/courses/</span></li>
                     <li><span class="faculty-theme-help-code">/gallery/</span></li>
                     <li><span class="faculty-theme-help-code">/contact/</span></li>
                 </ul>
@@ -1192,7 +1235,7 @@ function faculty_theme_render_settings_page() {
         </form>
 
         <script type="text/html" id="faculty-slide-template">
-            <?php faculty_theme_render_slide_fields('__INDEX__', array('image' => '', 'title' => '', 'text' => '', 'button_text' => '', 'button_url' => '', 'duration' => 7000, 'transition' => 'fade', 'image_fit' => 'contain')); ?>
+            <?php faculty_theme_render_slide_fields('__INDEX__', array('image' => '', 'title' => '', 'text' => '', 'button_text' => '', 'button_url' => '', 'duration' => 7000, 'transition' => 'fade', 'image_fit' => 'contain', 'title_size' => '')); ?>
         </script>
         <script type="text/html" id="faculty-parallax-template">
             <?php faculty_theme_render_parallax_fields('__INDEX__', array('image' => '', 'label' => '')); ?>
@@ -1217,7 +1260,7 @@ function faculty_theme_render_settings_page() {
 }
 
 function faculty_theme_render_slide_fields($index, $slide) {
-    $slide = wp_parse_args((array) $slide, array('image' => '', 'title' => '', 'text' => '', 'button_text' => '', 'button_url' => '', 'duration' => 7000, 'transition' => 'fade', 'image_fit' => 'contain'));
+    $slide = wp_parse_args((array) $slide, array('image' => '', 'title' => '', 'text' => '', 'button_text' => '', 'button_url' => '', 'duration' => 7000, 'transition' => 'fade', 'image_fit' => 'contain', 'title_size' => ''));
     $field_base = 'faculty_theme_options[slides][' . $index . ']';
     $image_id = 'faculty-slide-' . $index;
     $transitions = array(
@@ -1240,6 +1283,7 @@ function faculty_theme_render_slide_fields($index, $slide) {
         <p><label><?php esc_html_e('Summary', 'faculty-theme'); ?><br><textarea class="large-text" rows="2" name="<?php echo esc_attr($field_base); ?>[text]"><?php echo esc_textarea($slide['text']); ?></textarea></label></p>
         <p><label><?php esc_html_e('Button label', 'faculty-theme'); ?> <input name="<?php echo esc_attr($field_base); ?>[button_text]" value="<?php echo esc_attr($slide['button_text']); ?>"></label> <label><?php esc_html_e('Button URL', 'faculty-theme'); ?> <input class="regular-text" type="url" name="<?php echo esc_attr($field_base); ?>[button_url]" value="<?php echo esc_url($slide['button_url']); ?>"></label></p>
         <p>
+            <label><?php esc_html_e('Title size', 'faculty-theme'); ?> <input class="small-text" name="<?php echo esc_attr($field_base); ?>[title_size]" value="<?php echo esc_attr($slide['title_size']); ?>" placeholder="4rem"></label>
             <label><?php esc_html_e('Timing', 'faculty-theme'); ?> <input type="number" min="2000" max="30000" step="500" name="<?php echo esc_attr($field_base); ?>[duration]" value="<?php echo esc_attr($slide['duration']); ?>"> <?php esc_html_e('ms', 'faculty-theme'); ?></label>
             <label><?php esc_html_e('Transition', 'faculty-theme'); ?> <select name="<?php echo esc_attr($field_base); ?>[transition]"><?php foreach ($transitions as $transition_key => $transition_label) : ?><option value="<?php echo esc_attr($transition_key); ?>" <?php selected($slide['transition'], $transition_key); ?>><?php echo esc_html($transition_label); ?></option><?php endforeach; ?></select></label>
             <label><?php esc_html_e('Image fit', 'faculty-theme'); ?> <select name="<?php echo esc_attr($field_base); ?>[image_fit]"><?php foreach ($image_fits as $fit_key => $fit_label) : ?><option value="<?php echo esc_attr($fit_key); ?>" <?php selected($slide['image_fit'], $fit_key); ?>><?php echo esc_html($fit_label); ?></option><?php endforeach; ?></select></label>
@@ -1305,9 +1349,9 @@ function faculty_theme_render_research_project_fields($index, $project) {
     $field_base = 'faculty_theme_options[research_projects][' . $index . ']';
     $statuses = array(
         'active' => __('Active', 'faculty-theme'),
-        'completed' => __('Completed', 'faculty-theme'),
-        'paused' => __('Paused', 'faculty-theme'),
         'pending' => __('Pending / proposed', 'faculty-theme'),
+        'paused' => __('Paused', 'faculty-theme'),
+        'completed' => __('Completed', 'faculty-theme'),
     );
     ?>
     <details class="faculty-dynamic-item faculty-collapsible-item" data-repeat-item <?php echo is_numeric($index) ? '' : 'open'; ?>>
@@ -1463,7 +1507,7 @@ function faculty_theme_get_meta_image() {
     }
 
     $brand_logo = faculty_theme_get_option('brand_logo', '');
-    return $brand_logo ? $brand_logo : '';
+    return $brand_logo ? faculty_theme_normalize_media_url($brand_logo) : '';
 }
 
 function faculty_theme_render_seo_meta() {

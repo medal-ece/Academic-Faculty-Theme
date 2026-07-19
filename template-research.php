@@ -12,10 +12,21 @@ $projects = array_values((array) $options['research_projects']);
 $sponsors = array_values((array) $options['research_sponsors']);
 $project_statuses = array(
     'active' => __('Active', 'faculty-theme'),
-    'completed' => __('Completed', 'faculty-theme'),
-    'paused' => __('Paused', 'faculty-theme'),
     'pending' => __('Pending', 'faculty-theme'),
+    'paused' => __('Paused', 'faculty-theme'),
+    'completed' => __('Completed', 'faculty-theme'),
 );
+$project_status_order = array('active' => 10, 'pending' => 20, 'paused' => 30, 'completed' => 40);
+usort($projects, function ($a, $b) use ($project_status_order) {
+    $status_a = !empty($a['status']) && isset($project_status_order[$a['status']]) ? $a['status'] : 'active';
+    $status_b = !empty($b['status']) && isset($project_status_order[$b['status']]) ? $b['status'] : 'active';
+
+    if ($project_status_order[$status_a] === $project_status_order[$status_b]) {
+        return strcasecmp(!empty($a['title']) ? $a['title'] : '', !empty($b['title']) ? $b['title'] : '');
+    }
+
+    return $project_status_order[$status_a] <=> $project_status_order[$status_b];
+});
 ?>
 <?php faculty_theme_page_header(get_the_title()); ?>
 <main id="primary" class="site-main faculty-page-template faculty-research-page">
@@ -33,7 +44,7 @@ $project_statuses = array(
             <div class="faculty-research-grid">
                 <?php foreach ($areas as $area) : ?>
                     <article class="faculty-research-card">
-                        <?php if (!empty($area['image'])) : ?><img src="<?php echo esc_url($area['image']); ?>" alt="<?php echo esc_attr(!empty($area['title']) ? $area['title'] : __('Research area image', 'faculty-theme')); ?>" loading="lazy" decoding="async"><?php endif; ?>
+                        <?php if (!empty($area['image'])) : ?><img src="<?php echo esc_url(faculty_theme_normalize_media_url($area['image'])); ?>" alt="<?php echo esc_attr(!empty($area['title']) ? $area['title'] : __('Research area image', 'faculty-theme')); ?>" loading="lazy" decoding="async"><?php endif; ?>
                         <div class="faculty-research-card-body">
                             <?php if (!empty($area['title'])) : ?><h3><?php echo esc_html($area['title']); ?></h3><?php endif; ?>
                             <?php if (!empty($area['text'])) : ?><p><?php echo esc_html($area['text']); ?></p><?php endif; ?>
@@ -99,7 +110,7 @@ $project_statuses = array(
                 <?php foreach ($sponsors as $sponsor) : ?>
                     <li>
                         <?php if (!empty($sponsor['url'])) : ?><a href="<?php echo esc_url($sponsor['url']); ?>"><?php endif; ?>
-                        <?php if (!empty($sponsor['image'])) : ?><img src="<?php echo esc_url($sponsor['image']); ?>" alt="<?php echo esc_attr($sponsor['name']); ?>" loading="lazy" decoding="async"><?php else : ?><span><?php echo esc_html($sponsor['name']); ?></span><?php endif; ?>
+                        <?php if (!empty($sponsor['image'])) : ?><img src="<?php echo esc_url(faculty_theme_normalize_media_url($sponsor['image'])); ?>" alt="<?php echo esc_attr($sponsor['name']); ?>" loading="lazy" decoding="async"><?php else : ?><span><?php echo esc_html($sponsor['name']); ?></span><?php endif; ?>
                         <?php if (!empty($sponsor['url'])) : ?></a><?php endif; ?>
                     </li>
                 <?php endforeach; ?>

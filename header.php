@@ -20,7 +20,7 @@
         <div class="branding-bar">
             <div class="container branding-inner">
                 <div class="site-branding">
-                    <?php $brand_logo = faculty_theme_get_option('brand_logo', ''); ?>
+                    <?php $brand_logo = faculty_theme_normalize_media_url(faculty_theme_get_option('brand_logo', '')); ?>
                     <?php if ($brand_logo) : ?>
                         <a class="custom-logo-link" href="<?php echo esc_url(home_url('/')); ?>" rel="home"><img class="custom-logo" src="<?php echo esc_url($brand_logo); ?>" alt="<?php echo esc_attr(get_bloginfo('name')); ?>"></a>
                     <?php elseif (has_custom_logo()) : the_custom_logo(); endif; ?>
