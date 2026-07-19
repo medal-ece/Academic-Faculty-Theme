@@ -97,7 +97,7 @@ Copy-CleanDirectory -Source $root -Destination $stagePath -ExcludeRelative @(
     "*.zip"
 )
 
-New-ZipFromDirectory -SourceRoot $buildPath -ZipPath $zipPath
+New-ZipFromDirectory -SourceRoot $stagePath -ZipPath $zipPath
 Remove-Item -LiteralPath $buildPath -Recurse -Force
 
 Write-Host "Created: $zipPath"
