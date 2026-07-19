@@ -175,13 +175,38 @@
     }
 
     function activateTab(target) {
-        if (!target || !$(target).length) {
-            target = '#faculty-tab-general';
+        var panelSelector;
+        var legacyTargets = {
+            '#faculty-tab-general': '#faculty-group-general',
+            '#faculty-tab-front-page': '#faculty-group-homepage',
+            '#faculty-tab-intro': '#faculty-group-homepage',
+            '#faculty-tab-slider': '#faculty-group-homepage',
+            '#faculty-tab-news': '#faculty-group-homepage',
+            '#faculty-tab-visuals': '#faculty-group-homepage',
+            '#faculty-tab-contact': '#faculty-group-pages',
+            '#faculty-tab-research': '#faculty-group-research',
+            '#faculty-tab-gallery': '#faculty-group-gallery',
+            '#faculty-tab-colors': '#faculty-group-design',
+            '#faculty-tab-footer': '#faculty-group-footer',
+            '#faculty-tab-accessibility': '#faculty-group-maintenance',
+            '#faculty-tab-import-export': '#faculty-group-maintenance',
+            '#faculty-tab-help': '#faculty-group-help'
+        };
+
+        if (legacyTargets[target]) {
+            target = legacyTargets[target];
         }
+
+        if (!target || (!$('[data-faculty-panel-group="' + target + '"]').length && !$(target).length)) {
+            target = '#faculty-group-general';
+        }
+
+        panelSelector = $('[data-faculty-panel-group="' + target + '"]').length ? '[data-faculty-panel-group="' + target + '"]' : target;
+
         $('[data-faculty-tab]').removeClass('nav-tab-active').attr('aria-selected', 'false');
         $('[data-faculty-tab][href="' + target + '"]').addClass('nav-tab-active').attr('aria-selected', 'true');
         $('.faculty-theme-tab-panel').removeClass('is-active');
-        $(target).addClass('is-active');
+        $(panelSelector).addClass('is-active');
     }
 
     $('[data-faculty-tab]').on('click', function (event) {

@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) {
 }
 
 if (!defined('FACULTY_THEME_VERSION')) {
-    define('FACULTY_THEME_VERSION', '1.4.4');
+    define('FACULTY_THEME_VERSION', '1.4.5');
 }
 
 function faculty_theme_setup() {
@@ -563,8 +563,8 @@ function faculty_theme_add_settings_page() {
 
     add_submenu_page(
         'faculty-theme-settings',
-        __('Theme Settings', 'faculty-theme'),
-        __('Theme Settings', 'faculty-theme'),
+        __('Faculty Theme Settings', 'faculty-theme'),
+        __('Settings', 'faculty-theme'),
         'edit_theme_options',
         'faculty-theme-settings',
         'faculty_theme_render_settings_page'
@@ -637,7 +637,7 @@ function faculty_theme_import_settings() {
         }
     }
 
-    wp_safe_redirect(admin_url('admin.php?page=faculty-theme-settings&theme_imported=' . ($imported ? '1' : '0') . '#faculty-tab-import-export'));
+    wp_safe_redirect(admin_url('admin.php?page=faculty-theme-settings&theme_imported=' . ($imported ? '1' : '0') . '#faculty-group-maintenance'));
     exit;
 }
 
@@ -959,21 +959,22 @@ function faculty_theme_render_settings_page() {
             .faculty-gallery-deck-admin-preview img:nth-child(4) { transform: translate(calc(-50% + 2rem), calc(-50% + .4rem)) rotate(7deg); }
             .faculty-import-export-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; }
             .faculty-import-export-card { padding: 1rem; border: 1px solid #dcdcde; background: #fff; }
-            .faculty-theme-settings { --ft-admin-accent: #be0000; --ft-admin-ink: #17212b; --ft-admin-muted: #63707b; --ft-admin-line: #d9e0e5; --ft-admin-soft: #f6f8fa; --ft-admin-card: #fff; }
-            .faculty-theme-settings > h1 { margin-top: 1.25rem; color: var(--ft-admin-ink); font-size: 2rem; letter-spacing: -.025em; }
-            .faculty-theme-settings > p { max-width: 58rem; color: var(--ft-admin-muted); font-size: .98rem; }
-            .faculty-theme-tabs.nav-tab-wrapper { display: flex; flex-wrap: wrap; gap: .35rem; margin: 1.25rem 0 0; padding: .6rem; border: 1px solid var(--ft-admin-line); border-radius: 14px 14px 0 0; background: linear-gradient(135deg, #fff, #eef2f5); box-shadow: 0 10px 26px rgba(23,33,43,.05); }
-            .faculty-theme-tabs .nav-tab { margin: 0; padding: .65rem .9rem; border: 1px solid transparent; border-radius: 999px; background: transparent; color: var(--ft-admin-ink); font-weight: 700; transition: background-color .15s ease, color .15s ease, box-shadow .15s ease, transform .15s ease; }
-            .faculty-theme-tabs .nav-tab:hover { background: rgba(190,0,0,.07); color: #8a0000; transform: translateY(-1px); }
+            .faculty-theme-settings { --ft-admin-accent: #2f4858; --ft-admin-accent-dark: #1d2f3a; --ft-admin-warm: #8b6f3d; --ft-admin-ink: #18222b; --ft-admin-muted: #66717b; --ft-admin-line: #d7dde2; --ft-admin-soft: #f7f8f8; --ft-admin-card: #fff; }
+            .faculty-theme-settings > h1 { margin-top: 1.05rem; color: var(--ft-admin-ink); font-family: Georgia, "Times New Roman", serif; font-size: 1.75rem; font-weight: 700; letter-spacing: -.018em; }
+            .faculty-theme-settings > p { max-width: 58rem; color: var(--ft-admin-muted); font-size: .94rem; }
+            .faculty-theme-tabs.nav-tab-wrapper { display: flex; flex-wrap: wrap; gap: .2rem; margin: 1rem 0 0; padding: .35rem; border: 1px solid var(--ft-admin-line); border-bottom-color: #c8d0d6; border-radius: 4px 4px 0 0; background: #f2f4f5; box-shadow: none; }
+            .faculty-theme-tabs .nav-tab { margin: 0; padding: .46rem .72rem; border: 1px solid transparent; border-radius: 3px; background: transparent; color: var(--ft-admin-ink); font-size: .88rem; font-weight: 700; transition: background-color .12s ease, color .12s ease, border-color .12s ease; }
+            .faculty-theme-tabs .nav-tab:hover { border-color: #c9d1d7; background: #fff; color: var(--ft-admin-accent-dark); }
             .faculty-theme-tabs .nav-tab-active,
-            .faculty-theme-tabs .nav-tab-active:hover { border-color: rgba(190,0,0,.2); background: var(--ft-admin-accent); color: #fff; box-shadow: 0 8px 18px rgba(190,0,0,.22); }
-            .faculty-theme-tab-panel { max-width: 1180px; padding: clamp(1.2rem, 2.5vw, 2rem); border: 1px solid var(--ft-admin-line); border-top: 0; border-radius: 0 0 14px 14px; background: linear-gradient(145deg, #fff 0%, #f8fafb 100%); box-shadow: 0 16px 34px rgba(23,33,43,.06); }
-            .faculty-theme-tab-panel h2 { margin: 0 0 1rem; color: var(--ft-admin-ink); font-size: 1.45rem; letter-spacing: -.02em; }
-            .faculty-theme-tab-panel h3 { margin: 1.75rem 0 .8rem; color: var(--ft-admin-ink); font-size: 1.08rem; }
-            .faculty-theme-tab-panel .form-table { margin-top: .75rem; border-collapse: separate; border-spacing: 0 .75rem; }
-            .faculty-theme-tab-panel .form-table th { width: 230px; padding: 1rem 1rem 1rem 0; color: var(--ft-admin-ink); font-weight: 800; vertical-align: top; }
-            .faculty-theme-tab-panel .form-table td { padding: .85rem 1rem; border: 1px solid var(--ft-admin-line); border-radius: 12px; background: var(--ft-admin-card); box-shadow: 0 6px 18px rgba(23,33,43,.035); }
-            .faculty-theme-settings label { color: var(--ft-admin-ink); font-weight: 700; }
+            .faculty-theme-tabs .nav-tab-active:hover { border-color: var(--ft-admin-accent); background: var(--ft-admin-accent); color: #fff; box-shadow: none; }
+            .faculty-theme-tab-panel { max-width: 1120px; margin: 0; padding: 1.05rem 1.1rem; border: 1px solid var(--ft-admin-line); border-top: 0; border-radius: 0; background: #fff; box-shadow: none; }
+            .faculty-theme-tab-panel + .faculty-theme-tab-panel.is-active { border-top: 1px solid var(--ft-admin-line); margin-top: .9rem; }
+            .faculty-theme-tab-panel h2 { margin: 0 0 .75rem; color: var(--ft-admin-ink); font-family: Georgia, "Times New Roman", serif; font-size: 1.28rem; letter-spacing: -.01em; }
+            .faculty-theme-tab-panel h3 { margin: 1.25rem 0 .6rem; color: var(--ft-admin-ink); font-size: .98rem; letter-spacing: .01em; text-transform: uppercase; }
+            .faculty-theme-tab-panel .form-table { margin-top: .55rem; border-collapse: separate; border-spacing: 0 .52rem; }
+            .faculty-theme-tab-panel .form-table th { width: 215px; padding: .68rem .9rem .68rem 0; color: var(--ft-admin-ink); font-weight: 700; vertical-align: top; }
+            .faculty-theme-tab-panel .form-table td { padding: .6rem .72rem; border: 1px solid var(--ft-admin-line); border-radius: 3px; background: var(--ft-admin-card); box-shadow: none; }
+            .faculty-theme-settings label { color: var(--ft-admin-ink); font-weight: 650; }
             .faculty-theme-settings input[type="text"],
             .faculty-theme-settings input[type="url"],
             .faculty-theme-settings input[type="email"],
@@ -981,33 +982,33 @@ function faculty_theme_render_settings_page() {
             .faculty-theme-settings input[type="date"],
             .faculty-theme-settings input:not([type]),
             .faculty-theme-settings select,
-            .faculty-theme-settings textarea { min-height: 42px; border: 1px solid #cbd5dd; border-radius: 10px; background: #fff; box-shadow: inset 0 1px 2px rgba(23,33,43,.035); color: var(--ft-admin-ink); transition: border-color .15s ease, box-shadow .15s ease, background-color .15s ease; }
-            .faculty-theme-settings textarea { padding: .75rem .85rem; line-height: 1.55; }
+            .faculty-theme-settings textarea { min-height: 36px; border: 1px solid #c6cdd3; border-radius: 3px; background: #fff; box-shadow: none; color: var(--ft-admin-ink); transition: border-color .12s ease, box-shadow .12s ease, background-color .12s ease; }
+            .faculty-theme-settings textarea { padding: .55rem .62rem; line-height: 1.45; }
             .faculty-theme-settings input:focus,
             .faculty-theme-settings select:focus,
-            .faculty-theme-settings textarea:focus { border-color: var(--ft-admin-accent); box-shadow: 0 0 0 3px rgba(190,0,0,.12), inset 0 1px 2px rgba(23,33,43,.035); outline: none; }
-            .faculty-theme-settings input[type="color"] { width: 4.7rem; min-height: 2.65rem; padding: .22rem; border-radius: 10px; cursor: pointer; }
-            .faculty-theme-settings input[type="checkbox"] { width: 1.1rem; height: 1.1rem; border-radius: 4px; box-shadow: none; vertical-align: middle; }
+            .faculty-theme-settings textarea:focus { border-color: var(--ft-admin-accent); box-shadow: 0 0 0 2px rgba(47,72,88,.13); outline: none; }
+            .faculty-theme-settings input[type="color"] { width: 4.2rem; min-height: 2.3rem; padding: .16rem; border-radius: 3px; cursor: pointer; }
+            .faculty-theme-settings input[type="checkbox"] { width: 1rem; height: 1rem; border-radius: 2px; box-shadow: none; vertical-align: middle; }
             .faculty-theme-settings .description,
             .faculty-settings-note { color: var(--ft-admin-muted); line-height: 1.55; }
-            .faculty-theme-settings .button { min-height: 38px; padding: .25rem .85rem; border-radius: 999px; border-color: #b8c3cc; font-weight: 700; transition: transform .15s ease, box-shadow .15s ease, background-color .15s ease; }
-            .faculty-theme-settings .button:hover { transform: translateY(-1px); box-shadow: 0 6px 14px rgba(23,33,43,.08); }
+            .faculty-theme-settings .button { min-height: 34px; padding: .2rem .7rem; border-radius: 3px; border-color: #b8c3cc; font-weight: 650; transition: background-color .12s ease, border-color .12s ease; }
+            .faculty-theme-settings .button:hover { border-color: #8f9ba5; box-shadow: none; }
             .faculty-theme-settings .button-primary { border-color: var(--ft-admin-accent); background: var(--ft-admin-accent); }
             .faculty-theme-settings .faculty-slide-settings,
             .faculty-theme-settings .faculty-dynamic-item,
             .faculty-theme-settings .faculty-color-card,
-            .faculty-theme-settings .faculty-import-export-card { border: 1px solid var(--ft-admin-line); border-radius: 14px; background: var(--ft-admin-card); box-shadow: 0 10px 24px rgba(23,33,43,.055); overflow: hidden; }
-            .faculty-theme-settings .faculty-collapsible-item summary { padding: 1rem 1.1rem; border-left: 5px solid var(--ft-admin-accent); background: linear-gradient(135deg, #fff, #f3f6f8); }
-            .faculty-theme-settings .faculty-collapsible-item summary strong { font-size: 1rem; letter-spacing: -.01em; }
-            .faculty-theme-settings .faculty-collapsible-item summary span:last-child { margin-left: auto; padding: .25rem .6rem; border-radius: 999px; background: #eef2f5; color: var(--ft-admin-muted); font-size: .78rem; font-weight: 700; }
-            .faculty-theme-settings .faculty-collapsible-body { display: grid; gap: .85rem; padding: 1.1rem; }
+            .faculty-theme-settings .faculty-import-export-card { border: 1px solid var(--ft-admin-line); border-radius: 3px; background: var(--ft-admin-card); box-shadow: none; overflow: hidden; }
+            .faculty-theme-settings .faculty-collapsible-item summary { padding: .68rem .78rem; border-left: 3px solid var(--ft-admin-warm); background: #f7f8f8; }
+            .faculty-theme-settings .faculty-collapsible-item summary strong { font-size: .94rem; letter-spacing: 0; }
+            .faculty-theme-settings .faculty-collapsible-item summary span:last-child { margin-left: auto; padding: .18rem .45rem; border-radius: 2px; background: #e9edf0; color: var(--ft-admin-muted); font-size: .73rem; font-weight: 650; }
+            .faculty-theme-settings .faculty-collapsible-body { display: grid; gap: .65rem; padding: .8rem; }
             .faculty-theme-settings .faculty-collapsible-body p { margin: 0; }
             .faculty-theme-settings .faculty-slide-actions { margin: 0; }
-            .faculty-theme-settings .faculty-media-preview { width: 12rem; padding: .45rem; border-color: var(--ft-admin-line); border-radius: 12px; background: #f8fafb; box-shadow: 0 8px 20px rgba(23,33,43,.06); }
-            .faculty-theme-settings .faculty-media-preview img { height: 6.5rem; border-radius: 8px; }
-            .faculty-theme-settings .faculty-preview-panel { border-color: var(--ft-admin-line); border-radius: 12px; background: #f3f6f8; }
-            .faculty-theme-settings code { border-radius: 6px; background: #eef2f5; color: #28343d; }
-            .faculty-theme-settings .wp-editor-wrap { border-radius: 12px; overflow: hidden; box-shadow: 0 6px 18px rgba(23,33,43,.04); }
+            .faculty-theme-settings .faculty-media-preview { width: 10rem; padding: .35rem; border-color: var(--ft-admin-line); border-radius: 3px; background: #f8fafb; box-shadow: none; }
+            .faculty-theme-settings .faculty-media-preview img { height: 5.5rem; border-radius: 2px; }
+            .faculty-theme-settings .faculty-preview-panel { border-color: var(--ft-admin-line); border-radius: 3px; background: #f3f6f8; }
+            .faculty-theme-settings code { border-radius: 2px; background: #eef2f5; color: #28343d; }
+            .faculty-theme-settings .wp-editor-wrap { border-radius: 3px; overflow: hidden; box-shadow: none; }
             @media (max-width: 782px) {
                 .faculty-theme-tab-panel .form-table th,
                 .faculty-theme-tab-panel .form-table td { display: block; width: auto; padding: .85rem; }
@@ -1016,20 +1017,15 @@ function faculty_theme_render_settings_page() {
         </style>
 
         <nav class="nav-tab-wrapper faculty-theme-tabs" aria-label="<?php esc_attr_e('Faculty Theme settings sections', 'faculty-theme'); ?>">
-            <a href="#faculty-tab-general" class="nav-tab nav-tab-active" data-faculty-tab><?php esc_html_e('General', 'faculty-theme'); ?></a>
-            <a href="#faculty-tab-front-page" class="nav-tab" data-faculty-tab><?php esc_html_e('Front Page', 'faculty-theme'); ?></a>
-            <a href="#faculty-tab-intro" class="nav-tab" data-faculty-tab><?php esc_html_e('MEDAL Intro', 'faculty-theme'); ?></a>
-            <a href="#faculty-tab-slider" class="nav-tab" data-faculty-tab><?php esc_html_e('Slider', 'faculty-theme'); ?></a>
-            <a href="#faculty-tab-colors" class="nav-tab" data-faculty-tab><?php esc_html_e('Colors', 'faculty-theme'); ?></a>
-            <a href="#faculty-tab-news" class="nav-tab" data-faculty-tab><?php esc_html_e('News', 'faculty-theme'); ?></a>
-            <a href="#faculty-tab-contact" class="nav-tab" data-faculty-tab><?php esc_html_e('Contact', 'faculty-theme'); ?></a>
-            <a href="#faculty-tab-research" class="nav-tab" data-faculty-tab><?php esc_html_e('Research', 'faculty-theme'); ?></a>
-            <a href="#faculty-tab-gallery" class="nav-tab" data-faculty-tab><?php esc_html_e('Gallery', 'faculty-theme'); ?></a>
-            <a href="#faculty-tab-visuals" class="nav-tab" data-faculty-tab><?php esc_html_e('Visuals / Logos', 'faculty-theme'); ?></a>
-            <a href="#faculty-tab-footer" class="nav-tab" data-faculty-tab><?php esc_html_e('Footer', 'faculty-theme'); ?></a>
-            <a href="#faculty-tab-accessibility" class="nav-tab" data-faculty-tab><?php esc_html_e('Accessibility', 'faculty-theme'); ?></a>
-            <a href="#faculty-tab-import-export" class="nav-tab" data-faculty-tab><?php esc_html_e('Import / Export', 'faculty-theme'); ?></a>
-            <a href="#faculty-tab-help" class="nav-tab" data-faculty-tab><?php esc_html_e('Help / Widgets', 'faculty-theme'); ?></a>
+            <a href="#faculty-group-general" class="nav-tab nav-tab-active" data-faculty-tab><?php esc_html_e('General', 'faculty-theme'); ?></a>
+            <a href="#faculty-group-homepage" class="nav-tab" data-faculty-tab><?php esc_html_e('Homepage', 'faculty-theme'); ?></a>
+            <a href="#faculty-group-pages" class="nav-tab" data-faculty-tab><?php esc_html_e('Pages', 'faculty-theme'); ?></a>
+            <a href="#faculty-group-research" class="nav-tab" data-faculty-tab><?php esc_html_e('Research', 'faculty-theme'); ?></a>
+            <a href="#faculty-group-gallery" class="nav-tab" data-faculty-tab><?php esc_html_e('Gallery', 'faculty-theme'); ?></a>
+            <a href="#faculty-group-design" class="nav-tab" data-faculty-tab><?php esc_html_e('Visual Design', 'faculty-theme'); ?></a>
+            <a href="#faculty-group-footer" class="nav-tab" data-faculty-tab><?php esc_html_e('Footer', 'faculty-theme'); ?></a>
+            <a href="#faculty-group-maintenance" class="nav-tab" data-faculty-tab><?php esc_html_e('Maintenance', 'faculty-theme'); ?></a>
+            <a href="#faculty-group-help" class="nav-tab" data-faculty-tab><?php esc_html_e('Help', 'faculty-theme'); ?></a>
         </nav>
 
         <?php if (isset($_GET['theme_imported'])) : ?>
@@ -1044,7 +1040,7 @@ function faculty_theme_render_settings_page() {
         <form method="post" action="options.php">
             <?php settings_fields('faculty_theme_settings'); ?>
 
-            <section id="faculty-tab-general" class="faculty-theme-tab-panel is-active">
+            <section id="faculty-tab-general" class="faculty-theme-tab-panel is-active" data-faculty-panel-group="#faculty-group-general">
                 <h2><?php esc_html_e('General Theme Settings', 'faculty-theme'); ?></h2>
                 <table class="form-table" role="presentation">
                     <tr><th scope="row"><label for="faculty-eyebrow"><?php esc_html_e('Institution line', 'faculty-theme'); ?></label></th><td><input class="regular-text" id="faculty-eyebrow" name="faculty_theme_options[eyebrow]" value="<?php echo esc_attr($options['eyebrow']); ?>"></td></tr>
@@ -1054,7 +1050,7 @@ function faculty_theme_render_settings_page() {
                 </table>
             </section>
 
-            <section id="faculty-tab-front-page" class="faculty-theme-tab-panel">
+            <section id="faculty-tab-front-page" class="faculty-theme-tab-panel" data-faculty-panel-group="#faculty-group-homepage">
                 <h2><?php esc_html_e('Front Page Settings', 'faculty-theme'); ?></h2>
                 <p class="faculty-settings-note"><?php esc_html_e('These switches control the modular homepage shell. Content for the page itself still comes from the WordPress page editor, and widgets/gadgets are managed under Appearance > Widgets.', 'faculty-theme'); ?></p>
                 <table class="form-table" role="presentation">
@@ -1067,7 +1063,7 @@ function faculty_theme_render_settings_page() {
                 </table>
             </section>
 
-            <section id="faculty-tab-intro" class="faculty-theme-tab-panel">
+            <section id="faculty-tab-intro" class="faculty-theme-tab-panel" data-faculty-panel-group="#faculty-group-homepage">
                 <h2><?php esc_html_e('MEDAL Group Introduction', 'faculty-theme'); ?></h2>
                 <p class="faculty-settings-note"><?php esc_html_e('Use this for the concise top-of-page introduction. Keep it short: name, one strong sentence, a short paragraph, and one optional call-to-action.', 'faculty-theme'); ?></p>
                 <table class="form-table" role="presentation">
@@ -1080,7 +1076,7 @@ function faculty_theme_render_settings_page() {
                 </table>
             </section>
 
-            <section id="faculty-tab-slider" class="faculty-theme-tab-panel">
+            <section id="faculty-tab-slider" class="faculty-theme-tab-panel" data-faculty-panel-group="#faculty-group-homepage">
                 <h2><?php esc_html_e('Slider Settings', 'faculty-theme'); ?></h2>
                 <table class="form-table" role="presentation">
                     <tr><th scope="row"><label for="faculty-slide-font"><?php esc_html_e('Slide typography', 'faculty-theme'); ?></label></th><td><select id="faculty-slide-font" name="faculty_theme_options[slide_font]"><?php foreach ($slide_fonts as $font_key => $font_label) : ?><option value="<?php echo esc_attr($font_key); ?>" <?php selected($options['slide_font'], $font_key); ?>><?php echo esc_html($font_label); ?></option><?php endforeach; ?></select></td></tr>
@@ -1100,7 +1096,7 @@ function faculty_theme_render_settings_page() {
                 </p>
             </section>
 
-            <section id="faculty-tab-colors" class="faculty-theme-tab-panel">
+            <section id="faculty-tab-colors" class="faculty-theme-tab-panel" data-faculty-panel-group="#faculty-group-design">
                 <h2><?php esc_html_e('Theme Color Palette', 'faculty-theme'); ?></h2>
                 <p class="faculty-settings-note"><?php esc_html_e('These values drive the CSS variables used by the theme. Change them here instead of editing CSS when the site needs a color refresh.', 'faculty-theme'); ?></p>
                 <div class="faculty-color-grid">
@@ -1120,7 +1116,7 @@ function faculty_theme_render_settings_page() {
                 </div>
             </section>
 
-            <section id="faculty-tab-news" class="faculty-theme-tab-panel">
+            <section id="faculty-tab-news" class="faculty-theme-tab-panel" data-faculty-panel-group="#faculty-group-homepage">
                 <h2><?php esc_html_e('Homepage News', 'faculty-theme'); ?></h2>
                 <table class="form-table" role="presentation">
                     <tr><th scope="row"><?php esc_html_e('Display', 'faculty-theme'); ?></th><td><label><input type="checkbox" name="faculty_theme_options[show_news]" value="1" <?php checked($options['show_news'], '1'); ?>> <?php esc_html_e('Show the latest posts section', 'faculty-theme'); ?></label></td></tr>
@@ -1131,7 +1127,7 @@ function faculty_theme_render_settings_page() {
                 </table>
             </section>
 
-            <section id="faculty-tab-contact" class="faculty-theme-tab-panel">
+            <section id="faculty-tab-contact" class="faculty-theme-tab-panel" data-faculty-panel-group="#faculty-group-pages">
                 <h2><?php esc_html_e('Contact Page', 'faculty-theme'); ?></h2>
                 <p class="faculty-settings-note"><?php esc_html_e('Create a WordPress page and assign the Contact template. These fields populate that page.', 'faculty-theme'); ?></p>
                 <table class="form-table" role="presentation">
@@ -1143,7 +1139,7 @@ function faculty_theme_render_settings_page() {
                 </table>
             </section>
 
-            <section id="faculty-tab-research" class="faculty-theme-tab-panel">
+            <section id="faculty-tab-research" class="faculty-theme-tab-panel" data-faculty-panel-group="#faculty-group-research">
                 <h2><?php esc_html_e('Research Page', 'faculty-theme'); ?></h2>
                 <p class="faculty-settings-note"><?php esc_html_e('Create a WordPress page and assign the Research template. Use this tab for research topic images, funded projects, and sponsor logos.', 'faculty-theme'); ?></p>
                 <table class="form-table" role="presentation">
@@ -1175,7 +1171,7 @@ function faculty_theme_render_settings_page() {
                 <p><button type="button" class="button button-secondary" id="faculty-add-research-sponsor"><?php esc_html_e('Add sponsor', 'faculty-theme'); ?></button> <button type="button" class="button" data-collapse-list="#faculty-research-sponsor-list" data-collapse-action="expand"><?php esc_html_e('Expand all', 'faculty-theme'); ?></button> <button type="button" class="button" data-collapse-list="#faculty-research-sponsor-list" data-collapse-action="collapse"><?php esc_html_e('Collapse all', 'faculty-theme'); ?></button></p>
             </section>
 
-            <section id="faculty-tab-gallery" class="faculty-theme-tab-panel">
+            <section id="faculty-tab-gallery" class="faculty-theme-tab-panel" data-faculty-panel-group="#faculty-group-gallery">
                 <h2><?php esc_html_e('Gallery Page', 'faculty-theme'); ?></h2>
                 <p class="faculty-settings-note"><?php esc_html_e('Create a WordPress page and assign the Faculty Gallery template. Add timeline events here; each event becomes a stacked deck of overlapping photos.', 'faculty-theme'); ?></p>
                 <table class="form-table" role="presentation">
@@ -1197,7 +1193,7 @@ function faculty_theme_render_settings_page() {
                 <?php endif; ?>
             </section>
 
-            <section id="faculty-tab-visuals" class="faculty-theme-tab-panel">
+            <section id="faculty-tab-visuals" class="faculty-theme-tab-panel" data-faculty-panel-group="#faculty-group-homepage">
                 <h2><?php esc_html_e('Visual Dividers and Logos', 'faculty-theme'); ?></h2>
                 <p class="faculty-settings-note"><?php esc_html_e('Use university or lab photos as quiet visual dividers between homepage sections. The fixed-background effect is disabled automatically on small screens for better mobile behavior.', 'faculty-theme'); ?></p>
 
@@ -1222,7 +1218,7 @@ function faculty_theme_render_settings_page() {
                 <p><button type="button" class="button button-secondary" id="faculty-add-logo"><?php esc_html_e('Add logo', 'faculty-theme'); ?></button> <button type="button" class="button" data-collapse-list="#faculty-logo-list" data-collapse-action="expand"><?php esc_html_e('Expand all', 'faculty-theme'); ?></button> <button type="button" class="button" data-collapse-list="#faculty-logo-list" data-collapse-action="collapse"><?php esc_html_e('Collapse all', 'faculty-theme'); ?></button></p>
             </section>
 
-            <section id="faculty-tab-footer" class="faculty-theme-tab-panel">
+            <section id="faculty-tab-footer" class="faculty-theme-tab-panel" data-faculty-panel-group="#faculty-group-footer">
                 <h2><?php esc_html_e('Footer', 'faculty-theme'); ?></h2>
                 <table class="form-table" role="presentation">
                     <tr><th scope="row"><label for="faculty-footer-lab-info"><?php esc_html_e('Lab address / info', 'faculty-theme'); ?></label></th><td><textarea class="large-text" rows="4" id="faculty-footer-lab-info" name="faculty_theme_options[footer_lab_info]"><?php echo esc_textarea($options['footer_lab_info']); ?></textarea><p class="description"><?php esc_html_e('Shown above the copyright in the left footer column. Basic HTML links are allowed.', 'faculty-theme'); ?></p></td></tr>
@@ -1230,7 +1226,7 @@ function faculty_theme_render_settings_page() {
                 </table>
             </section>
 
-            <section id="faculty-tab-accessibility" class="faculty-theme-tab-panel">
+            <section id="faculty-tab-accessibility" class="faculty-theme-tab-panel" data-faculty-panel-group="#faculty-group-maintenance">
                 <h2><?php esc_html_e('Accessibility Checks', 'faculty-theme'); ?></h2>
                 <p class="faculty-settings-note"><?php esc_html_e('These checks look for images that may be missing meaningful text in the theme-managed areas.', 'faculty-theme'); ?></p>
                 <?php if (empty($accessibility_warnings)) : ?>
@@ -1245,7 +1241,7 @@ function faculty_theme_render_settings_page() {
                 <?php endif; ?>
             </section>
 
-            <section id="faculty-tab-import-export" class="faculty-theme-tab-panel">
+            <section id="faculty-tab-import-export" class="faculty-theme-tab-panel" data-faculty-panel-group="#faculty-group-maintenance">
                 <h2><?php esc_html_e('Import / Export Settings', 'faculty-theme'); ?></h2>
                 <p class="faculty-settings-note"><?php esc_html_e('Export a JSON copy before major design changes, or paste a previously exported JSON file to restore/move settings.', 'faculty-theme'); ?></p>
                 <div class="faculty-import-export-grid">
@@ -1282,7 +1278,7 @@ function faculty_theme_render_settings_page() {
                 </div>
             </section>
 
-            <section id="faculty-tab-help" class="faculty-theme-tab-panel">
+            <section id="faculty-tab-help" class="faculty-theme-tab-panel" data-faculty-panel-group="#faculty-group-help">
                 <h2><?php esc_html_e('Recommended content areas', 'faculty-theme'); ?></h2>
                 <p><?php printf(wp_kses_post(__('Add blocks or plugin widgets to the three homepage regions under <a href="%s">Appearance > Widgets</a>. The Page Bottom region is available on regular pages.', 'faculty-theme')), esc_url(admin_url('widgets.php'))); ?></p>
                 <p><?php esc_html_e('Recommended homepage pattern: concise MEDAL introduction, one optional university photo divider, a short news list, and a bottom logo strip. Keep extra widgets optional so the first page stays short and focused.', 'faculty-theme'); ?></p>
